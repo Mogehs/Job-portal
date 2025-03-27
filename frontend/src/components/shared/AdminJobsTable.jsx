@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import {
   Table,
   TableBody,
@@ -28,39 +27,35 @@ const AdminJobsTable = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const filteredJobs =
-      allAdminJobs?.length >= 0 &&
-      allAdminJobs.filter((job) => {
-        if (!jobBySearch) {
-          return true;
-        }
-        return job?.title?.toLowerCase().includes(jobBySearch.toLowerCase());
-      });
+    const filteredJobs = allAdminJobs.filter((job) =>
+      jobBySearch
+        ? job?.title?.toLowerCase().includes(jobBySearch.toLowerCase())
+        : true
+    );
     setFilterJobs(filteredJobs);
   }, [allAdminJobs, jobBySearch]);
 
   return (
     <div>
-      <Table>
-        <TableCaption>A list of your Created Jobs</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[250px] text-left ">Company Name</TableHead>
-            <TableHead className="w-[300px] text-left">Job Title</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead className="text-right">Action</TableHead>
-          </TableRow>
-        </TableHeader>
-
-        {filterJobs?.length <= 0 ? (
-          <>
-            <div className="flex justify-center items-center w-[50vw]">
-              <p className="font-bold ">No Job Is Posted</p>
-            </div>
-          </>
-        ) : (
-          filterJobs.map((job, idx) => (
-            <TableBody>
+      {filterJobs.length === 0 ? (
+        <div className="flex justify-center items-center w-full py-6">
+          <p className="font-bold">No Job Is Posted</p>
+        </div>
+      ) : (
+        <Table>
+          <TableCaption>A list of your Created Jobs</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[250px] text-left ">
+                Company Name
+              </TableHead>
+              <TableHead className="w-[300px] text-left">Job Title</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead className="text-right">Action</TableHead>
+            </TableRow>
+          </TableHeader>
+          {filterJobs.map((job) => (
+            <TableBody key={job._id}>
               <TableRow>
                 <TableCell>{job.company.name}</TableCell>
                 <TableCell>{job.title}</TableCell>
@@ -71,13 +66,6 @@ const AdminJobsTable = () => {
                       <MoreHorizontal />
                     </PopoverTrigger>
                     <PopoverContent className="w-15">
-                      <Link
-                        className="flex gap-2"
-                        onClick={() => navigate(`/admin/jobs/${job._id}`)}
-                      >
-                        <Edit2 className="w-4" />
-                        Edit
-                      </Link>
                       <Link
                         className="flex gap-2"
                         onClick={() =>
@@ -92,9 +80,9 @@ const AdminJobsTable = () => {
                 </TableCell>
               </TableRow>
             </TableBody>
-          ))
-        )}
-      </Table>
+          ))}
+        </Table>
+      )}
     </div>
   );
 };
