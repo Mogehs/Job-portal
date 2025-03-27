@@ -114,22 +114,23 @@ const CompanyDetails = () => {
               </div>
               <div>
                 <Label htmlFor="companySelect">Select Your Company</Label>
-                <Select>
+                <Select
+                  onValueChange={
+                    (value) => setInput({ ...input, companyId: value }) // Correctly updates companyId in state
+                  }
+                >
                   <SelectTrigger
                     id="companySelect"
-                    name="companyId"
-                    onChange={changeEventHandler}
                     className="w-[15rem] h-[2.5rem]"
                   >
                     <SelectValue placeholder="Company" />
                   </SelectTrigger>
                   <SelectContent>
-                    {allCompanies?.length >= 0 &&
-                      allCompanies?.map((company, id) => (
-                        <SelectItem value={company._id}>
-                          {company.name}
-                        </SelectItem>
-                      ))}
+                    {allCompanies?.map((company) => (
+                      <SelectItem key={company._id} value={company._id}>
+                        {company.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
